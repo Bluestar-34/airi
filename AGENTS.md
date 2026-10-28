@@ -177,3 +177,15 @@ These directories also have their own `AGENTS.md`. Read it before you work in th
 
 - `packages/model-driver-mediapipe/`
 - `services/computer-use-mcp/`
+
+## Personal Fork Workflow
+
+- Read `custom-development.md` and `issues-and-improvements.md` before starting personal development.
+- Write user-facing update notes in Simplified Chinese.
+- For each update, record changed paths, symbols, behavior, checks, results, and limits in `custom-changelog.md`.
+- Include the related update record with its code commit.
+- Preserve the user's original issue text. Record implementation notes separately.
+- Mark an implemented issue as awaiting acceptance until the user accepts it.
+- Use feature branches and Conventional Commits. Keep agent configuration changes in a separate commit.
+- Push personal changes to `origin`. Keep the original project under `upstream`.
+- Report the pushed branch, commit, and changed file locations after delivery.
