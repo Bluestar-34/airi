@@ -4,6 +4,37 @@
 记录改动原因、具体文件与位置、行为变化、验证结果和未验证项。
 通过 `git log --oneline -- <文件路径>` 查看关联提交。
 
+## 2026-10-28：个人 Fork 与开发协作流程
+
+### 改动原因
+
+把二开代码同步到个人 GitHub，并持续记录更新位置、问题与优化想法。
+
+### 更新文件与位置
+
+| 文件 | 具体位置 | 更新内容 |
+| --- | --- | --- |
+| `custom-development.md` | Git 工作方式、开发与验证、每次交付记录 | 约定远端、分支、提交规范、检查和交付要求。 |
+| `issues-and-improvements.md` | 随手记录区、待处理区、已完成区与模板 | 预留用户问题和优化记录，区分开发完成与用户验收。 |
+| `custom-changelog.md` | 本记录及后续记录模板 | 每次列出更新文件、具体符号、行为与验证证据。 |
+| `AGENTS.md` | `Personal Fork Workflow` | 持久化个人开发要求。协作规范作为独立提交。 |
+
+### Git 配置
+
+- 个人 Fork：`https://github.com/Bluestar-34/airi`。
+- 功能分支：`bluestar-34/feat/character-window-drag`。
+- `origin` 指向个人 Fork，`upstream` 指向原项目。
+- 本地启用 `pull.rebase=true` 和 `fetch.prune=true`。
+- 人物拖拽功能提交：`2677d2f`。
+- 更新日志不包含本机密钥、运行配置、缓存或安装包。
+
+### 验证方式
+
+- `git diff --check`：检查空白错误。
+- 提交钩子 `pnpm nano-staged`：执行暂存文件检查。
+- 推送后对比本地 HEAD 与 GitHub 分支提交。
+- 最终交付时报告推送是否成功，不把本地提交当作远端同步完成。
+
 ## 2026-10-28：拖拽人物移动桌面窗口
 
 ### 改动原因
