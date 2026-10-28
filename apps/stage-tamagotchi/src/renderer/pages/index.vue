@@ -40,7 +40,7 @@ import ControlsIsland from '../components/stage-islands/controls-island/index.vu
 import ResourceStatusIsland from '../components/stage-islands/resource-status-island/index.vue'
 import WindowResizeBorder from '../components/window-resize-border.vue'
 
-import { defaultFullscreenSurface, electronAppIsWayland, electronFullscreenExit, electronFullscreenSetMode, electronMainWindowEnterFullscreen, electronMainWindowGetFullscreenState, electronMainWindowSetFullscreenBounds, electronOpenInlay, electronOpenOnboarding, electronOpenSettings } from '../../shared/eventa'
+import { defaultFullscreenSurface, electronAppIsWayland, electronFullscreenExit, electronFullscreenSetMode, electronMainWindowEnterFullscreen, electronMainWindowGetFullscreenState, electronMainWindowSetFullscreenBounds, electronOpenInlay, electronOpenOnboarding, electronOpenSettings, electronStartDraggingWindow } from '../../shared/eventa'
 import { fullscreenHostPages, fullscreenSurfaceOf } from '../components/fullscreen/surfaces'
 import { useModelSettingsRuntimeOwner } from '../composables/model-settings-runtime-owner'
 import { useFullscreenHost } from '../composables/use-fullscreen-host'
@@ -48,6 +48,7 @@ import { provideFullscreenLayout } from '../composables/use-fullscreen-layout'
 import { usePushToTalkShortcut } from '../composables/use-push-to-talk-shortcut'
 import { useScreenAmbientLight } from '../composables/use-screen-ambient-light'
 import { stageOpaqueAttribute } from '../composables/use-stage-painted-mask'
+import { useStageWindowDrag } from '../composables/use-stage-window-drag'
 import { useControlsIslandStore } from '../stores/controls-island'
 import { useFullscreenStore } from '../stores/fullscreen'
 import { useStageWindowLifecycleStore } from '../stores/stage-window-lifecycle'
@@ -297,6 +298,17 @@ const modelSettingsRuntimeSnapshot = computed<ModelSettingsRuntimeSnapshot>(() =
 
 const fullscreen = useFullscreenStore()
 const { phase: fullscreenPhase, active: fullscreenActive } = storeToRefs(fullscreen)
+const startDraggingWindow = useElectronEventaInvoke(electronStartDraggingWindow)
+const getIsLinux = useElectronEventaInvoke(electron.app.isLinux)
+const nativeWindowDragAvailable = ref(false)
+onMounted(async () => {
+  nativeWindowDragAvailable.value = !await getIsLinux()
+})
+useStageWindowDrag(
+  stageCanvas,
+  () => nativeWindowDragAvailable.value && stageMounted.value && !stagePaused.value && !fullscreenActive.value && !controlsOverlayActive.value,
+  () => { void startDraggingWindow().catch(console.error) },
+)
 const router = useRouter()
 useFullscreenHost()
 const enterFullscreenWindow = useElectronEventaInvoke(electronMainWindowEnterFullscreen)
